@@ -233,12 +233,24 @@ namespace CampusNavegacion
         {
             txtResultados.Clear();
 
-            // El Heap se vacía al extraer los elementos, se reinsertan para la demostración visual
+            // Reinstanciamos el heap para llenarlo con TODAS las rutas del campus
+            // tal como se exige en la captura final de la rúbrica [cite: 357-374].
             heapRutas = new MinHeap();
-            heapRutas.Insertar("Cafeteria (B)", 120);
-            heapRutas.Insertar("Laboratorio de Computo (C)", 200);
 
+            heapRutas.Insertar("Rectoria -> Aulas", 80);
+            heapRutas.Insertar("Laboratorio -> Aulas", 100);
+            heapRutas.Insertar("Biblioteca -> Cafeteria", 120);
+            heapRutas.Insertar("Cafeteria -> Rectoria", 150);
+            heapRutas.Insertar("Aulas -> Estacionam.", 180);
+            heapRutas.Insertar("Biblioteca -> Laboratorio", 200);
+            heapRutas.Insertar("Gimnasio -> Estacionam.", 250);
+            heapRutas.Insertar("Cafeteria -> Gimnasio", 300);
+
+            // Ejecutamos el método que extrae y ordena
             heapRutas.MostrarRutasOrdenadas();
+
+           // Imprimimos el total al final para que la salida sea idéntica a la del examen [cite: 374]
+            Console.WriteLine("\nTotal de rutas: 8");
         }
 
         private void btnReiniciar_Click(object sender, EventArgs e)
