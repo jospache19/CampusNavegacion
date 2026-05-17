@@ -5,8 +5,7 @@ namespace CampusNavegacion
 {
     public class Grafo
     {
-        // Diccionario para la lista de adyacencia
-        // Llave: Edificio, Valor: Lista de tuplas (Destino, Distancia)
+       
         private Dictionary<string, List<Tuple<string, int>>> listaAdyacencia;
 
         public Grafo()
@@ -79,7 +78,7 @@ namespace CampusNavegacion
                 }
             }
 
-            // Agrupar e imprimir por niveles para coincidir con la salida esperada
+            // Agrupar e imprimir por niveles
             Dictionary<int, List<string>> edificiosPorNivel = new Dictionary<int, List<string>>();
             foreach (var kvp in niveles)
             {
@@ -129,7 +128,6 @@ namespace CampusNavegacion
                         break;
                     }
 
-                    // Invertimos la lista de adyacencia para que el Stack procese en un orden más natural (LIFO)
                     List<Tuple<string, int>> vecinos = listaAdyacencia[actual];
                     for (int i = vecinos.Count - 1; i >= 0; i--)
                     {
@@ -160,6 +158,24 @@ namespace CampusNavegacion
                 camino.Reverse();
 
                 Console.WriteLine($"✓ Camino encontrado: {string.Join(" -> ", camino)}");
+
+                
+                int distanciaTotal = 0;
+                for (int i = 0; i < camino.Count - 1; i++)
+                {
+                    string nodo1 = camino[i];
+                    string nodo2 = camino[i + 1];
+
+                    foreach (var conexion in listaAdyacencia[nodo1])
+                    {
+                        if (conexion.Item1 == nodo2)
+                        {
+                            distanciaTotal += conexion.Item2;
+                            break;
+                        }
+                    }
+                }
+                Console.WriteLine($"Distancia total del camino: {distanciaTotal} metros");
             }
             else
             {
