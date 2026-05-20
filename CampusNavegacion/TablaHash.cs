@@ -44,7 +44,6 @@ namespace CampusNavegacion
                 return;
             }
 
-          
             var edificiosOrdenados = visitas.Keys.OrderByDescending(e => ObtenerConteo(e)).ToList();
 
             foreach (string edificio in edificiosOrdenados)
@@ -52,6 +51,10 @@ namespace CampusNavegacion
                 int cantidad = ObtenerConteo(edificio);
                 Console.WriteLine($"{edificio,-30} {cantidad} visitas");
             }
+
+            
+            string topEdificio = EdificioMasVisitado();
+            Console.WriteLine($"\nEdificio más visitado: {topEdificio} con {ObtenerConteo(topEdificio)} visitas");
         }
 
         public string EdificioMasVisitado()
