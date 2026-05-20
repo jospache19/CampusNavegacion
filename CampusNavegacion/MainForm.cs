@@ -12,12 +12,12 @@ namespace CampusNavegacion
 {
     public partial class MainForm : Form
     {
-        // Estructuras lógicas
+      
         private Grafo grafo;
         private TablaHash tablaVisitas;
         private MinHeap heapRutas;
 
-        // Variables para renderizado visual
+    
         private Dictionary<string, Point> coordenadas;
         private List<string> rutaActiva;
         private string origenActual;
@@ -27,7 +27,7 @@ namespace CampusNavegacion
         {
             InitializeComponent();
 
-            // Activar DoubleBuffer para evitar parpadeos al redibujar
+          
             typeof(Panel).InvokeMember("DoubleBuffered",
                 System.Reflection.BindingFlags.SetProperty |
                 System.Reflection.BindingFlags.Instance |
@@ -46,7 +46,7 @@ namespace CampusNavegacion
             origenActual = "";
             destinoActual = "";
 
-            // 1. Mapeo de coordenadas físicas en el Panel (ajusta X e Y según el tamaño de tu panel)
+          
             coordenadas = new Dictionary<string, Point>
             {
                 { "Biblioteca Central (A)", new Point(100, 250) },
@@ -58,7 +58,7 @@ namespace CampusNavegacion
                 { "Estacionamiento (G)", new Point(700, 350) }
             };
 
-            // 2. Llenar ComboBoxes
+          
             foreach (var edificio in coordenadas.Keys)
             {
                 cmbOrigen.Items.Add(edificio);
@@ -67,7 +67,6 @@ namespace CampusNavegacion
             if (cmbOrigen.Items.Count > 0) cmbOrigen.SelectedIndex = 0;
             if (cmbDestino.Items.Count > 0) cmbDestino.SelectedIndex = cmbDestino.Items.Count - 1;
 
-            // 3. Cargar datos base del grafo
             grafo.AgregarCamino("Biblioteca Central (A)", "Cafeteria (B)", 120);
             grafo.AgregarCamino("Biblioteca Central (A)", "Laboratorio de Computo (C)", 200);
             grafo.AgregarCamino("Cafeteria (B)", "Rectoria (D)", 150);
@@ -77,7 +76,7 @@ namespace CampusNavegacion
             grafo.AgregarCamino("Gimnasio (E)", "Estacionamiento (G)", 250);
             grafo.AgregarCamino("Aulas Generales (F)", "Estacionamiento (G)", 180);
 
-            // Preparar el MinHeap (Tarea 5) internamente para cuando se presione el botón
+            // Tarea5
             heapRutas.Insertar("Cafeteria (B)", 120);
             heapRutas.Insertar("Laboratorio de Computo (C)", 200);
             Console.SetOut(new TextBoxWriter(txtResultados));
@@ -86,7 +85,7 @@ namespace CampusNavegacion
         private void panelMapa_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias; // Bordes suaves
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias; 
 
             Pen penCaminoNormal = new Pen(Color.LightGray, 3);
             Pen penCaminoActivo = new Pen(Color.MediumSeaGreen, 5);
@@ -97,10 +96,7 @@ namespace CampusNavegacion
 
             int radio = 25;
 
-            // 1. DIBUJAR LÍNEAS (Caminos)
-            // Aquí definimos manualmente las conexiones físicas para dibujarlas de una vez
-            // 1. DIBUJAR LÍNEAS (Caminos y Distancias)
-            // Agregamos la distancia al final de la tupla (Origen, Destino, Distancia)
+            
             var aristasFisicas = new List<Tuple<string, string, int>>
             {
                 Tuple.Create("Biblioteca Central (A)", "Cafeteria (B)", 120),
@@ -118,7 +114,7 @@ namespace CampusNavegacion
                 Point p1 = coordenadas[arista.Item1];
                 Point p2 = coordenadas[arista.Item2];
 
-                // Verificar si esta arista forma parte de la ruta activa (DFS)
+               
                 bool esRutaActiva = false;
                 for (int i = 0; i < rutaActiva.Count - 1; i++)
                 {
@@ -133,38 +129,38 @@ namespace CampusNavegacion
                 g.DrawLine(esRutaActiva ? penCaminoActivo : penCaminoNormal, p1.X, p1.Y, p2.X, p2.Y);
 
                 
-                // Calcular el punto medio de la línea
+          
                 int midX = (p1.X + p2.X) / 2;
                 int midY = (p1.Y + p2.Y) / 2;
 
-                // Dibujar un pequeño fondo blanco para que el texto sea legible
+               
                 string textoDistancia = $"{arista.Item3}m";
                 SizeF tamanoTexto = g.MeasureString(textoDistancia, new Font("Arial", 9));
                 g.FillRectangle(Brushes.White, midX - (tamanoTexto.Width / 2), midY - (tamanoTexto.Height / 2), tamanoTexto.Width, tamanoTexto.Height);
 
-                // Dibujar el texto de la distancia
+              
                 g.DrawString(textoDistancia, new Font("Arial", 9), Brushes.DimGray, midX - (tamanoTexto.Width / 2), midY - (tamanoTexto.Height / 2));
             }
 
-            // 2. DIBUJAR NODOS (Edificios)
+        
             foreach (var nodo in coordenadas)
             {
                 Point p = nodo.Value;
                 Brush colorActual = brushNodoNormal;
 
-                // Lógica de colores según el estado visual
+               
                 if (nodo.Key == origenActual) colorActual = brushNodoOrigen;
                 else if (nodo.Key == destinoActual) colorActual = brushNodoDestino;
                 else if (rutaActiva.Contains(nodo.Key)) colorActual = brushNodoVisitado;
 
-                // Dibujar círculo centrado
+              
                 g.FillEllipse(colorActual, p.X - radio, p.Y - radio, radio * 2, radio * 2);
 
-                // Extraer solo la letra (Ej: "A") para dibujarla dentro del nodo
+             
                 string letra = nodo.Key.Substring(nodo.Key.Length - 2, 1);
                 g.DrawString(letra, new Font("Arial", 12, FontStyle.Bold), Brushes.White, p.X - 8, p.Y - 8);
 
-                // Dibujar el nombre completo abajo del nodo
+               
                 g.DrawString(nodo.Key, new Font("Arial", 8), Brushes.Black, p.X - radio - 10, p.Y + radio + 5);
             }
         }
@@ -186,10 +182,10 @@ namespace CampusNavegacion
 
             grafo.RecorridoBFS(origenActual);
 
-            // Registramos visita del origen en la tabla hash para mantener estadísticas
+   
             tablaVisitas.RegistrarVisita(origenActual);
 
-            panelMapa.Invalidate(); // Repinta el mapa
+            panelMapa.Invalidate(); 
         }
 
         private void btnDFS_Click(object sender, EventArgs e)
@@ -203,7 +199,7 @@ namespace CampusNavegacion
 
             grafo.RecorridoDFS(origenActual, destinoActual);
 
-            // Leer la consola redirigida para extraer el camino exacto y pintarlo
+          
             string texto = txtResultados.Text;
             if (texto.Contains("✓ Camino encontrado:"))
             {
@@ -216,11 +212,11 @@ namespace CampusNavegacion
                 }
             }
 
-            // Registramos visitas en la tabla hash
+       
             tablaVisitas.RegistrarVisita(origenActual);
             tablaVisitas.RegistrarVisita(destinoActual);
 
-            panelMapa.Invalidate(); // Repinta el mapa con la ruta
+            panelMapa.Invalidate();
         }
 
         private void btnTablaHash_Click(object sender, EventArgs e)
@@ -233,8 +229,7 @@ namespace CampusNavegacion
         {
             txtResultados.Clear();
 
-            // Reinstanciamos el heap para llenarlo con TODAS las rutas del campus
-            // tal como se exige en la captura final de la rúbrica [cite: 357-374].
+          
             heapRutas = new MinHeap();
 
             heapRutas.Insertar("Rectoria -> Aulas", 80);
@@ -246,10 +241,10 @@ namespace CampusNavegacion
             heapRutas.Insertar("Gimnasio -> Estacionam.", 250);
             heapRutas.Insertar("Cafeteria -> Gimnasio", 300);
 
-            // Ejecutamos el método que extrae y ordena
+          
             heapRutas.MostrarRutasOrdenadas();
 
-           // Imprimimos el total al final para que la salida sea idéntica a la del examen [cite: 374]
+           
             Console.WriteLine("\nTotal de rutas: 8");
         }
 
@@ -260,7 +255,7 @@ namespace CampusNavegacion
             destinoActual = "";
             rutaActiva.Clear();
 
-            // Reiniciar la tabla hash a cero
+       
             tablaVisitas = new TablaHash();
 
             panelMapa.Invalidate();

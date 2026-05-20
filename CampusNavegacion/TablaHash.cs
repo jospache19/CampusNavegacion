@@ -38,18 +38,19 @@ namespace CampusNavegacion
         {
             Console.WriteLine("\n=== ESTADÍSTICAS DE VISITAS ===");
 
-            var visitasOrdenadas = visitas.OrderByDescending(x => x.Value);
-
-            foreach (var item in visitasOrdenadas)
+            if (visitas.Count == 0)
             {
-                string sufijo = item.Value == 1 ? "visita" : "visitas";
-                Console.WriteLine($"{item.Key,-25} {item.Value} {sufijo}");
+                Console.WriteLine("Aún no hay visitas registradas.");
+                return;
             }
 
-            string masVisitado = EdificioMasVisitado();
-            if (!string.IsNullOrEmpty(masVisitado))
+          
+            var edificiosOrdenados = visitas.Keys.OrderByDescending(e => ObtenerConteo(e)).ToList();
+
+            foreach (string edificio in edificiosOrdenados)
             {
-                Console.WriteLine($"\nEdificio más visitado: {masVisitado} con {visitas[masVisitado]} visitas");
+                int cantidad = ObtenerConteo(edificio);
+                Console.WriteLine($"{edificio,-30} {cantidad} visitas");
             }
         }
 

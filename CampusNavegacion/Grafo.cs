@@ -26,7 +26,7 @@ namespace CampusNavegacion
             AgregarEdificio(origen);
             AgregarEdificio(destino);
 
-            // Grafo bidireccional
+            // bidireccional
             listaAdyacencia[origen].Add(new Tuple<string, int>(destino, distancia));
             listaAdyacencia[destino].Add(new Tuple<string, int>(origen, distancia));
         }
@@ -78,7 +78,7 @@ namespace CampusNavegacion
                 }
             }
 
-            // Agrupar e imprimir por niveles
+           
             Dictionary<int, List<string>> edificiosPorNivel = new Dictionary<int, List<string>>();
             foreach (var kvp in niveles)
             {

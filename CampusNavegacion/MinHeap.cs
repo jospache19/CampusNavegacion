@@ -26,13 +26,13 @@ namespace CampusNavegacion
             }
 
             Tuple<string, int> minimo = elementos[0];
-            // Reemplazar la raíz con el último elemento
+            
             elementos[0] = elementos[elementos.Count - 1];
             elementos.RemoveAt(elementos.Count - 1);
 
             if (!EstaVacio())
             {
-                Hundir(0); // Reacomodar el montículo
+                Hundir(0); 
             }
 
             return minimo;
@@ -63,13 +63,13 @@ namespace CampusNavegacion
             Console.WriteLine("Todas las rutas fueron procesadas.");
         }
 
-        // --- Métodos auxiliares privados para mantener la propiedad del Min-Heap ---
+       
 
         private void Flotar(int indice)
         {
             int indicePadre = (indice - 1) / 2;
 
-            // Mientras no sea la raíz y el hijo sea menor que el padre
+           
             while (indice > 0 && elementos[indice].Item2 < elementos[indicePadre].Item2)
             {
                 Intercambiar(indice, indicePadre);
