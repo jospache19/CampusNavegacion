@@ -19,4 +19,4 @@ Para hacer funcionar el mapa y sus algoritmos, se implementaron las siguientes e
 * Min-Heap (Mínimo): Estructura creada para almacenar rutas. Su objetivo es ordenar y extraer automáticamente los caminos de menor a mayor distancia.
 lementado:
 
-* **Video explicativo:** 
+* **Video explicativo:** https://drive.google.com/file/d/1zdaH57WxuRAkA8YTFQDDmOY2ZYMkushv/view?usp=sharing
